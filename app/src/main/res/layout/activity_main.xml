@@ -19,16 +19,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <EditText
             android:id="@+id/address"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="TASHKENT, UZ"
             android:textColor="@color/white"
             android:textSize="24sp" />
-
+        <Button
+            android:id="@+id/search_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#006ED1FF"
+            android:text="Search"
+            android:onClick="get"
+            android:textColor="@color/black"
+            />
         <TextView
-            android:id="@+id/updated_at"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Local Time"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/local_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="11 October 2023"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Updated At:"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/last_updated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="11 October 2023"
@@ -59,14 +85,23 @@
             android:text="Clear Sky"
             android:textColor="@color/white"
             android:textSize="18dp" />
-
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Current Temp (°C)"
+            android:textColor="@color/white"
+            android:textSize="18dp" />
         <TextView
             android:id="@+id/temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-thin"
-            android:text="29°C"
+            android:text="29"
             android:textColor="@color/white"
             android:textSize="90dp" />
 
@@ -144,14 +179,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sunrise"
+                    android:text="Cloud"
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/sunrise"
+                    android:id="@+id/cloud"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="06:40 AM"
+                    android:text="1"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -308,7 +343,7 @@
                     android:id="@+id/humidity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="06:40 AM"
+                    android:text="44"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -329,7 +364,7 @@
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:src="@drawable/info"
+                    android:src="@drawable/sunrise"
                     app:tint="#FFFFFF" />
 
                 <Space
@@ -339,14 +374,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Info"
+                    android:text="Sunrise"
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/about"
+                    android:id="@+id/sunrise"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Weather"
+                    android:text="20"
                     android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>

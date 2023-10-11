@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import coil.load
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private var pressure_mb by Delegates.notNull<Double>()
     private lateinit var sunrise: String
     private lateinit var sunset: String
+    private lateinit var weatherImg:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,15 +45,12 @@ class MainActivity : AppCompatActivity() {
 
                     val location = response!!.getJSONObject("location")
                     val forecast = response.getJSONObject("current")
-                    val weather_condition =
-                        response.getJSONObject("current").getJSONObject("condition")
+                    val weather_condition = response.getJSONObject("current").getJSONObject("condition")
                     city = location.getString("name")
-                    val sun_info = response.getJSONObject("forecast").getJSONArray("forecastday")
-                        .getJSONObject(0).getJSONObject("astro")
-                    val tempInfo = response.getJSONObject("forecast").getJSONArray("forecastday")
-                        .getJSONObject(0).getJSONObject("day")
+                    val sun_info = response.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONObject("astro")
+                    val tempInfo = response.getJSONObject("forecast").getJSONArray("forecastday").getJSONObject(0).getJSONObject("day")
 
-
+                    weatherImg=weather_condition.getString("icon")
                     humidity = forecast.getInt("humidity")
                     temp = forecast.getDouble("temp_c")
                     local_time = location.getString("localtime")
@@ -62,7 +61,9 @@ class MainActivity : AppCompatActivity() {
                     wind = forecast.getString("wind_mph")
                     pressure_mb = forecast.getDouble("pressure_mb")
 
-
+when (status){
+    "Sunny" -> binding.weatherImg.load("https://cdn.weatherapi.com/weather/64x64/day/113.png")
+}
                     var h24_rise = sun_info.getString("sunrise").subSequence(0, 2)
                     var m24_rise = sun_info.getString("sunrise").subSequence(3, 5)
                     sunrise = "$h24_rise:$m24_rise"

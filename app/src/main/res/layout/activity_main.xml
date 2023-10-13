@@ -167,7 +167,7 @@
         <LinearLayout
             android:id="@+id/detailsContainer"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="10dp"
             android:orientation="vertical"
@@ -416,18 +416,19 @@
                         android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
+<Space
+    android:layout_width="match_parent"
+    android:layout_height="20dp"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/futureForecast_rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                tools:listitem="@layout/day"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/day" />
+
+
         </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

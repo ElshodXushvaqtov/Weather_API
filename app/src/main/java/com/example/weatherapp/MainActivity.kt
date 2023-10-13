@@ -56,26 +56,26 @@ class MainActivity : AppCompatActivity() {
                     val weather_condition =
                         response.getJSONObject("current").getJSONObject("condition")
                     city = location.getString("name")
-                    val days = response.getJSONObject("forecast").getJSONArray("forecastday")
+                    val hours = response.getJSONObject("forecast").getJSONArray("forecastday")
+                        .getJSONObject(0).getJSONArray("hour")
                     val sun_info = response.getJSONObject("forecast").getJSONArray("forecastday")
                         .getJSONObject(0).getJSONObject("astro")
                     val tempInfo = response.getJSONObject("forecast").getJSONArray("forecastday")
                         .getJSONObject(0).getJSONObject("day")
-                    var day_info = days.getJSONObject(0)
-                    for (i in 0 until days.length()) {
+                    var day_info: JSONObject
+                    for (i in 0 until hours.length()) {
 
-                        day_info = days.getJSONObject(i)
+                        day_info = hours.getJSONObject(i)
 
-                        val date = day_info.getString("date")
-                        val day = day_info.getJSONObject("day")
-                        val maxtemp_c =
-                            day.getString("maxtemp_c").toDouble().roundToInt().toString() + "° C"
-                        val mintemp_c =
-                            day.getString("mintemp_c").toDouble().roundToInt().toString() + "° C"
-                        val condition = day.getJSONObject("condition")
+                        val date = day_info.getString("time")
+                        val wind_mph =
+                            day_info.getString("wind_mph").toString() + " m/s"
+                        val feels_like =
+                            day_info.getString("feelslike_c").toString() + "° C"
+                        val condition = day_info.getJSONObject("condition")
                         val con_text = condition.getString("text")
                         val day_icon = "https:" + condition.getString("icon")
-                        daysList.add(DayData(date, maxtemp_c, mintemp_c, con_text, day_icon))
+                        daysList.add(DayData(date, wind_mph, feels_like, con_text, day_icon))
 
                         adapter.notifyDataSetChanged()
 
@@ -92,9 +92,6 @@ class MainActivity : AppCompatActivity() {
                     wind = forecast.getString("wind_mph")
                     pressure_mb = forecast.getDouble("pressure_mb")
 
-                    when (status) {
-                        "Sunny" -> binding.weatherImg.load("https://cdn.weatherapi.com/weather/64x64/day/113.png")
-                    }
                     var h24_rise = sun_info.getString("sunrise").subSequence(0, 2)
                     var m24_rise = sun_info.getString("sunrise").subSequence(3, 5)
                     sunrise = "$h24_rise:$m24_rise"
@@ -104,7 +101,7 @@ class MainActivity : AppCompatActivity() {
                     var m24_set = sun_info.getString("sunset").subSequence(3, 5)
                     sunset = "$h24_set:$m24_set"
 
-
+                    binding.weatherImg.load("https:${weather_condition.getString("icon")}")
                     binding.lastUpdated.text = last_updated
                     binding.localDate.text = local_time
                     binding.temp.text = temp.toString()

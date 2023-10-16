@@ -3,19 +3,16 @@ package com.example.weatherapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
 import coil.load
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.weatherapp.adapter.DayAdapter
+import com.example.weatherapp.adapter.HourAdapter
 import com.example.weatherapp.adapter.DayData
 import com.example.weatherapp.databinding.ActivityMainBinding
 import org.json.JSONObject
-import java.net.URL
-import java.text.SimpleDateFormat
-import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
@@ -32,21 +29,25 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sunrise: String
     private lateinit var sunset: String
     private lateinit var weatherImg: String
-    private lateinit var daysList: MutableList<DayData>
-    private lateinit var adapter: DayAdapter
+    private lateinit var hoursList: MutableList<DayData>
+    private lateinit var adapter: HourAdapter
+    private lateinit var weekAdapter: DayAdapter
+    private lateinit var dayList: MutableList<DayData>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        daysList = mutableListOf()
-        adapter = DayAdapter(daysList)
-
-        binding.futureForecastRv.adapter = adapter
+        hoursList = mutableListOf()
+        dayList = mutableListOf()
+        adapter = HourAdapter(hoursList)
+        weekAdapter = DayAdapter(dayList)
+        binding.hoursRv.adapter = adapter
+        binding.futureForecastRv.adapter = weekAdapter
 
         val requestQueue = Volley.newRequestQueue(this)
         binding.searchBtn.setOnClickListener {
             val url =
-                "http://api.weatherapi.com/v1/forecast.json?Key=542c36dc84064b1fa22132223230810&q=${binding.address.text}"
+                "http://api.weatherapi.com/v1/forecast.json?Key=542c36dc84064b1fa22132223230810&q=${binding.address.text}&days=7"
             val request = JsonObjectRequest(url, object : Response.Listener<JSONObject> {
                 override fun onResponse(response: JSONObject?) {
 
@@ -56,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                     val weather_condition =
                         response.getJSONObject("current").getJSONObject("condition")
                     city = location.getString("name")
+                    val week = response.getJSONObject("forecast").getJSONArray("forecastday")
                     val hours = response.getJSONObject("forecast").getJSONArray("forecastday")
                         .getJSONObject(0).getJSONArray("hour")
                     val sun_info = response.getJSONObject("forecast").getJSONArray("forecastday")
@@ -63,6 +65,7 @@ class MainActivity : AppCompatActivity() {
                     val tempInfo = response.getJSONObject("forecast").getJSONArray("forecastday")
                         .getJSONObject(0).getJSONObject("day")
                     var day_info: JSONObject
+                    var week_info: JSONObject
                     for (i in 0 until hours.length()) {
 
                         day_info = hours.getJSONObject(i)
@@ -75,12 +78,25 @@ class MainActivity : AppCompatActivity() {
                         val condition = day_info.getJSONObject("condition")
                         val con_text = condition.getString("text")
                         val day_icon = "https:" + condition.getString("icon")
-                        daysList.add(DayData(date, wind_mph, feels_like, con_text, day_icon))
+                        hoursList.add(DayData(date, wind_mph, feels_like, con_text, day_icon))
 
                         adapter.notifyDataSetChanged()
 
                     }
+                    for (i in 0 until week.length()) {
 
+                        week_info = week.getJSONObject(i)
+
+                        val date = week_info.getString("date")
+                        val temp = week_info.getJSONObject("day").getString("avgtemp_c") + "° C"
+                        val condition = week_info.getJSONObject("day").getJSONObject("condition")
+                        val con_text = condition.getString("text")
+                        val day_icon = "https:" + condition.getString("icon")
+                        val humidity = week_info.getJSONObject("day").getString("avghumidity")
+                        dayList.add(DayData(date, temp, humidity, con_text, day_icon))
+                        weekAdapter.notifyDataSetChanged()
+
+                    }
                     weatherImg = weather_condition.getString("icon")
                     humidity = forecast.getInt("humidity")
                     temp = forecast.getDouble("temp_c")

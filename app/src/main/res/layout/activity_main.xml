@@ -420,13 +420,23 @@
     android:layout_width="match_parent"
     android:layout_height="20dp"/>
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/futureForecast_rv"
+                android:id="@+id/hours_rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/day" />
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/futureForecast_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/day" />
 
         </LinearLayout>
 
